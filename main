@@ -1,0 +1,48 @@
+def load_words():
+    with open('words_alpha.txt') as word_file:
+        valid_words = set(word_file.read().split())
+
+    return valid_words
+
+
+class Trie:
+    def __init__(self):
+        self.head = TrieNode('')
+        self.num_of_nodes = 0
+
+    def insert_word(self, word):
+        current = self.head
+        for char in word:
+            if not current.has_child(char):
+                self.num_of_nodes += 1
+                current.add_char(char)
+            current = current.children[char]
+
+        current.is_word = True
+
+    def __str__(self):
+        return f"Number of nodes: {self.num_of_nodes}"
+
+
+class TrieNode:
+    def __init__(self, char):
+        self.char = char
+        self.is_word = False
+        self.children = {}
+
+    def has_child(self, char):
+        return char in self.children
+
+    def add_char(self, char):
+        self.children[char] = TrieNode(char)
+
+
+if __name__ == '__main__':
+    english_words = load_words()
+    # demo print
+    print('fate' in english_words)
+    trie = Trie()
+    trie.insert_word("hello")
+    trie.insert_word("howdie")
+    trie.insert_word("hell")
+    print(trie)
